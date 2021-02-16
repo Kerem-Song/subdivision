@@ -102,17 +102,9 @@ const LoginPage = () => {
     }
   };
 
-  const onLoginTest = () => {
-    // isLoggedInVar(true);
-    // console.log(getValues());
-    const { phoneNumber, password } = getValues();
-    console.log(phoneNumber);
-    console.log(password);
-  };
-
   return (
     <div className="h-screen flex justify-center items-center">
-      <form onSubmit={handleSubmit(onLoginTest)}>
+      <form onSubmit={handleSubmit(onSubmit)}>
         <div>
           <input
             className="inputBorer"
