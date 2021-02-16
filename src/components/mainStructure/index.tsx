@@ -1,6 +1,5 @@
 import React, { ReactChild, ReactChildren } from "react";
 import Header from "../../components/header";
-import { sideBar } from "../../utils/sideBar";
 import Footer from "../footer";
 import { SideBar } from "../sidebar/sideBar";
 

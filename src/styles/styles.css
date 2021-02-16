@@ -584,6 +584,51 @@ video {
   }
 }
 
+.inputWrap {
+  display: grid;
+  align-items: center;
+  justify-content: center;
+  padding-bottom: 0.5rem;
+  text-align: center;
+  grid-template-columns: repeat(12, minmax(0, 1fr));
+}
+
+.inputLabel {
+  --tw-bg-opacity: 1;
+  background-color: rgba(229, 231, 235, var(--tw-bg-opacity));
+  --tw-border-opacity: 1;
+  border-color: rgba(229, 231, 235, var(--tw-border-opacity));
+  border-width: 1px;
+  padding-top: 0.5rem;
+  padding-bottom: 0.5rem;
+  padding-left: 1rem;
+  padding-right: 1rem;
+  text-align: center;
+  grid-column: span 3 / span 3;
+}
+
+.inputBorder {
+  --tw-border-opacity: 1;
+  border-color: rgba(229, 231, 235, var(--tw-border-opacity));
+  border-width: 1px;
+  padding-top: 0.5rem;
+  padding-bottom: 0.5rem;
+  padding-left: 1rem;
+  padding-right: 1rem;
+  grid-column: span 9 / span 9;
+}
+
+.select {
+  --tw-border-opacity: 1;
+  border-color: rgba(229, 231, 235, var(--tw-border-opacity));
+  border-width: 1px;
+  padding-top: 0.5rem;
+  padding-bottom: 0.5rem;
+  padding-left: 1rem;
+  padding-right: 1rem;
+  grid-column: span 3 / span 3;
+}
+
 .space-y-0 > :not([hidden]) ~ :not([hidden]) {
   --tw-space-y-reverse: 0;
   margin-top: calc(0px * calc(1 - var(--tw-space-y-reverse)));
@@ -26733,6 +26778,7 @@ video {
 
 .select-all {
   -webkit-user-select: all;
+      -ms-user-select: all;
           user-select: all;
 }
 
@@ -57288,6 +57334,7 @@ video {
 
   .sm\:select-all {
     -webkit-user-select: all;
+        -ms-user-select: all;
             user-select: all;
   }
 
@@ -87813,6 +87860,7 @@ video {
 
   .md\:select-all {
     -webkit-user-select: all;
+        -ms-user-select: all;
             user-select: all;
   }
 
@@ -118338,6 +118386,7 @@ video {
 
   .lg\:select-all {
     -webkit-user-select: all;
+        -ms-user-select: all;
             user-select: all;
   }
 
@@ -148863,6 +148912,7 @@ video {
 
   .xl\:select-all {
     -webkit-user-select: all;
+        -ms-user-select: all;
             user-select: all;
   }
 
@@ -179388,6 +179438,7 @@ video {
 
   .\32xl\:select-all {
     -webkit-user-select: all;
+        -ms-user-select: all;
             user-select: all;
   }
 

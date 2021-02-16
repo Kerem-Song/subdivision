@@ -8,7 +8,7 @@ import {
   OptionPage,
 } from "../pages";
 
-export const MainRouter = () => {
+const LoggedInRouter = () => {
   return (
     <Router>
       <Switch>
@@ -21,3 +21,5 @@ export const MainRouter = () => {
     </Router>
   );
 };
+
+export default LoggedInRouter;

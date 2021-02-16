@@ -1,23 +1,7 @@
 import React from "react";
-
 import { gql, useQuery } from "@apollo/client";
-import Header from "../components/header";
-import { SideBar } from "../components/sidebar/sideBar";
 import Pagination from "../components/pagination";
-import Footer from "../components/footer";
 import MainStructure from "../components/mainStructure";
-
-const TEST_QUERY = gql`
-  query {
-    users {
-      data {
-        id
-        name
-        email
-      }
-    }
-  }
-`;
 
 interface IUser {
   id: number;
@@ -28,27 +12,23 @@ interface IUser {
 let refetchData;
 
 const ProjectPage = () => {
-  const { loading, error, data, refetch } = useQuery(TEST_QUERY);
+  // const { loading, error, data, refetch } = useQuery(Me);
 
-  refetchData = refetch;
+  // refetchData = refetch;
 
-  if (loading) {
-    return <p>Loading...</p>;
-  }
+  // if (loading) {
+  //   return <p>Loading...</p>;
+  // }
 
-  if (error) {
-    return <p>error...</p>;
-  }
+  // if (error) {
+  //   return <p>error...</p>;
+  // }
 
-  const users = data.users.data;
-  const reverse = users.slice().sort((a: IUser, b: IUser) => b.id - a.id);
+  // const users = data.users.data;
+  // const reverse = users.slice().sort((a: IUser, b: IUser) => b.id - a.id);
+  // console.log("projectPage data:", data);
 
   return (
-    // <main>
-    //   <div id="projectPage" className="flex">
-    //     <SideBar />
-    //     <section className="p-2 bg-gray-200 w-full">
-    //       <Header />
     <MainStructure>
       <div className="projectWrap bg-white mt-2">
         <h3 className="px-5 py-3 bg-gray-600 text-white">프로젝트 관리</h3>
@@ -88,7 +68,7 @@ const ProjectPage = () => {
               </tr>
             </thead>
             <tbody>
-              {reverse.map((user: IUser) => {
+              {/* {data.map((user: IUser) => {
                 return (
                   <tr className="border-b border-1 text-center" key={user.id}>
                     <td>{user.id}</td>
@@ -102,17 +82,14 @@ const ProjectPage = () => {
                     </td>
                   </tr>
                 );
-              })}
+              })} */}
             </tbody>
           </table>
         </div>
+        {/* <div>{data}</div> */}
         <Pagination totalPage={3} />
       </div>
     </MainStructure>
-    //       <Footer />
-    //     </section>
-    //   </div>
-    // </main>
   );
 };
 

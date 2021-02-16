@@ -1,3 +1,21 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
+@layer components {
+  .inputWrap {
+    @apply grid grid-cols-12 pb-2 justify-center items-center text-center;
+  }
+
+  .inputLabel {
+    @apply col-span-3 px-4 py-2 border border-gray-200 bg-gray-200 text-center;
+  }
+
+  .inputBorder {
+    @apply col-span-9 px-4 py-2 border border-gray-200;
+  }
+
+  .select {
+    @apply col-span-3 px-4 py-2 border border-gray-200;
+  }
+}
