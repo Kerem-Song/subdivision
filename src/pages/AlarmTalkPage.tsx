@@ -3,41 +3,26 @@ import { gql, useQuery } from "@apollo/client";
 import MainStructure from "../components/mainStructure";
 import Pagination from "../components/pagination";
 
-// const TEST_QUERY = gql`
-//   query {
-//     users {
-//       data {
-//         id
-//         name
-//         email
-//       }
+// const CUSTOMERS_QUERY = gql`
+//   mutation CustomersQuery($SearchCustomersInput: SearchCustomersInput!) {
+//     customers(input: $SearchCustomersInput) {
+//       ok
+//       error
+//       totalPages
+//       data
 //     }
 //   }
 // `;
 
-interface IUser {
-  id: number;
+interface ICustomers {
+  pageNo: number;
+  pageSize: number;
+  phoneNumber: string;
   name: string;
-  email: string;
 }
 
 const AlarmTalkPage = () => {
-  // const { loading, error, data, refetch } = useQuery(TEST_QUERY);
-
-  // if (loading) {
-  //   return <p>Loading...</p>;
-  // }
-
-  // if (error) {
-  //   return <p>Error...</p>;
-  // }
-
   const totalMembers = 1321;
-  // const users = data.users.data;
-  // const reverse = users.slice().sort((a: IUser, b: IUser) => b.id - a.id);
-  // const halfUsers = Math.ceil(reverse.length / 2);
-  // const firstHalf = reverse.slice(0, halfUsers);
-  // const secondHalf = reverse.slice(-halfUsers);
 
   return (
     <MainStructure>

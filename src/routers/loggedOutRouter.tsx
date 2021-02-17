@@ -1,18 +1,22 @@
 import React from "react";
 import { BrowserRouter as Router, Switch, Route } from "react-router-dom";
-import CreateAccout from "../pages/CreateAccountPage";
+import CreateUserPage from "../pages/CreateUserPage";
 import LoginPage from "../pages/LoginPage";
+import { NotFound } from "../pages/404";
 
 const LoggedOutRouter = () => {
   return (
     <Router>
       <Switch>
-        <Route path="/createAccount">
-          <CreateAccout />
+        <Route path="/createUser">
+          <CreateUserPage />
         </Route>
 
-        <Route path="/">
+        <Route exact path="/">
           <LoginPage />
+        </Route>
+        <Route>
+          <NotFound />
         </Route>
       </Switch>
     </Router>

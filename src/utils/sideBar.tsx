@@ -2,7 +2,7 @@ const sideBar = [
   {
     listsId: 1,
     listsTitle: "ProjectPage",
-    listsUrl: "/",
+    listsUrl: "/project",
     listsIcon: "fab fa-creative-commons",
     exact: true,
   },

@@ -16,7 +16,7 @@ export const SideBar = () => {
                 <NavLink
                   key={v.listsId}
                   to={`${v.listsUrl}`}
-                  onClick={() => console.log(`match.url:`, v.listsUrl)}
+                  // onClick={() => console.log(`match.url:`, v.listsUrl)}
                 >
                   <li className="py-2">{v.listsTitle}</li>
                 </NavLink>

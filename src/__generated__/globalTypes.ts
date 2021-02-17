@@ -7,6 +7,16 @@
 // START Enums and Input Objects
 //==============================================================
 
+export enum UserRole {
+  Admin = "Admin",
+  Operator = "Operator",
+}
+
+export interface CreateUserDto {
+  phoneNumber: string;
+  password: string;
+}
+
 export interface LoginInput {
   phoneNumber: string;
   password: string;

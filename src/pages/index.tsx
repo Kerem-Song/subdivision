@@ -1,4 +1,4 @@
-import CreateAccountPage from "./CreateAccountPage";
+import CreateUserPage from "./CreateUserPage";
 import LoginPage from "./LoginPage";
 import ProjectPage from "./ProjectPage";
 import InfoPage from "./InfoPage";
@@ -7,7 +7,7 @@ import ReservationPage from "./ReservationPage";
 import OptionPage from "./OptionPage";
 
 export {
-  CreateAccountPage,
+  CreateUserPage,
   LoginPage,
   ProjectPage,
   InfoPage,
