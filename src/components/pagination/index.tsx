@@ -5,8 +5,8 @@ interface IPagination {
 }
 
 const Pagination = ({ totalPage }: IPagination) => {
-  const [pageNo, setPageNo] = useState(1);
-  // const [pageSize, setPageSize] = useState(5);
+  const [page, setPage] = useState(1);
+  const [pageSize, setPageSize] = useState(5);
 
   // 페이지 리스트 불러오는 쿼리 or dispatch
   // useEffect(() => {
@@ -23,24 +23,25 @@ const Pagination = ({ totalPage }: IPagination) => {
     const page = e.currentTarget.dataset.page;
     const pageNum = Number(page);
 
-    // setPageNo(pageNum);
+    setPage(pageNum);
   };
 
   const handlePageIndex = (e: React.MouseEvent<HTMLElement>) => {
     const action = e.currentTarget.dataset.action;
 
     if (action === "prev") {
-      return setPageNo(pageNo - 1);
+      return setPage(page - 1);
     } else if (action === "next") {
-      return setPageNo(pageNo + 1);
+      return setPage(page + 1);
     }
   };
 
+  console.log("pagination page:", page);
   return (
     <div className="paginationWrap flex justify-center items-center">
       <ul className="pagination flex justify-center items-center">
         <li className="page-item p-3">
-          {pageNo === 1 ? null : (
+          {page === 1 ? null : (
             <a
               className="page-link"
               href="#"
@@ -67,7 +68,7 @@ const Pagination = ({ totalPage }: IPagination) => {
           })}
         </li>
         <li className="page-item p-3">
-          {pageNo < totalPage ? (
+          {page < totalPage ? (
             <a
               className="page-link"
               href="#"

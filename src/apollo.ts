@@ -14,7 +14,6 @@ export const authTokenVar = makeVar(token);
 const httpLink = createHttpLink({
   uri:
     "http://dev-parcelout-backend.ap-northeast-2.elasticbeanstalk.com/graphql",
-  // credentials: "include",
 });
 
 const authLink = setContext((_, { headers }) => {
@@ -23,14 +22,11 @@ const authLink = setContext((_, { headers }) => {
     headers: {
       ...headers,
       "x-jwt": authTokenVar() || "",
-      // "Content-Type": "application/json;charset=UTF-8",
-      "Access-Control-Allow-Origin": "*",
     },
   };
 });
 export const client = new ApolloClient({
   link: authLink.concat(httpLink),
-  // credentials: "include",
   cache: new InMemoryCache({
     typePolicies: {
       Query: {

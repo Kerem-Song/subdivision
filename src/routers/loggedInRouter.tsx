@@ -11,13 +11,18 @@ import {
   AlarmTalkPage,
   ReservationPage,
   OptionPage,
+  CreateCustomerPage,
+  // SearchPage,
 } from "../pages";
 import { useMe } from "../hooks/useMe";
 import { NotFound } from "../pages/404";
 
-const OperatorRoutes = () => [
-  <Route exact path="/reservation">
+const OperatorRoutes = [
+  <Route key={1} exact path="/reservation">
     <ReservationPage />
+  </Route>,
+  <Route key={2} path="/Search">
+    {/* <SearchPage /> */}
   </Route>,
 ];
 
@@ -43,6 +48,7 @@ const LoggedInRouter = () => {
         <Route path="/alarmtalk" component={AlarmTalkPage} />
         <Route path="/reservation" component={ReservationPage} />
         <Route path="/option" component={OptionPage} />
+        <Route path="/createCustomer" component={CreateCustomerPage} />
         <Route>
           <NotFound />
         </Route>

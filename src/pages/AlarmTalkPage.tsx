@@ -1,49 +1,124 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
+import { useHistory } from "react-router-dom";
+import { Helmet } from "react-helmet-async";
 import { gql, useQuery } from "@apollo/client";
 import MainStructure from "../components/mainStructure";
-import Pagination from "../components/pagination";
+import {
+  CustomersQuery,
+  CustomersQueryVariables,
+} from "../__generated__/CustomersQuery";
+import { useForm } from "react-hook-form";
 
-// const CUSTOMERS_QUERY = gql`
-//   mutation CustomersQuery($SearchCustomersInput: SearchCustomersInput!) {
-//     customers(input: $SearchCustomersInput) {
-//       ok
-//       error
-//       totalPages
-//       data
-//     }
-//   }
-// `;
+const CUSTOMERS_QUERY = gql`
+  query CustomersQuery($searchCustomerInput: SearchCustomerInput!) {
+    customers(input: $searchCustomerInput) {
+      ok
+      error
+      totalPages
+      data {
+        phoneNumber
+        name
+      }
+    }
+  }
+`;
 
 interface ICustomers {
-  pageNo: number;
-  pageSize: number;
+  totalPages?: number;
   phoneNumber: string;
   name: string;
 }
 
+interface IFormProps {
+  searchTerm: string;
+  alarmTalkText: string;
+}
+
 const AlarmTalkPage = () => {
-  const totalMembers = 1321;
+  const [page, setPage] = useState(1);
+  const [pageSize, setPageSize] = useState(7);
+  const history = useHistory();
+
+  const { data, loading, error, refetch } = useQuery<
+    CustomersQuery,
+    CustomersQueryVariables
+  >(CUSTOMERS_QUERY, {
+    variables: {
+      searchCustomerInput: {
+        pageNo: page,
+        pageSize: pageSize,
+      },
+    },
+  });
+
+  const { register, handleSubmit, getValues } = useForm<IFormProps>();
+  const onSearchSubmit = () => {
+    const { searchTerm } = getValues();
+    history.push({
+      pathname: "/search",
+      search: `?term=${searchTerm}`,
+    });
+  };
+
+  useEffect(() => {
+    refetch();
+  }, [data]);
+
+  if (!data || loading || error) {
+    return (
+      <div className="h-screen flex justify-center items-center">
+        <span className="font-medium text-xl tracking-wide">Loading...</span>
+      </div>
+    );
+  }
+
+  const totalPages = data ? data?.customers?.totalPages : null;
+  const customersData = data ? data?.customers?.data : null;
+
+  if (!customersData) {
+    return (
+      <div className="h-screen flex justify-center items-center">
+        <span className="font-medium text-xl tracking-wide">Loading...</span>
+      </div>
+    );
+  }
+
+  const half = Math.ceil(customersData?.length / 2);
+  const firstCustomers = customersData?.slice(0, half);
+  const secondCustomers = customersData?.slice(-half);
+
+  const onNextPageClick = () => setPage((current) => current + 1);
+  const onPrevPageClick = () => setPage((current) => current - 1);
 
   return (
     <MainStructure>
       <>
+        <Helmet>
+          <title>알람톡</title>
+        </Helmet>
         <div className="alarmtalkWrap grid grid-cols-2">
           <div className="memberWrap mt-2 mr-1 bg-white">
             <div className="headerWrap flex justify-between items-center px-5 py-3 bg-gray-700 text-white">
               <h3>01 분양톡 멤버</h3>
-              <p>TOTAL: {totalMembers}명</p>
+              <p>TOTAL: {customersData.length}명</p>
             </div>
-            <div className="searchWrap flex justify-between items-center p-5">
-              <div className="inputWrap border-b border-1 border-gray-100">
+            <form
+              className="searchWrap flex w-full items-center p-5"
+              onSubmit={handleSubmit(onSearchSubmit)}
+            >
+              <div className="border-b border-1 border-gray-100">
                 <input
-                  className=""
-                  placeholder="이름이나 연락처로 검색해 주세요"
+                  className="max-w-max"
+                  ref={register({ required: true })}
+                  name="searchTerm"
+                  type="Search"
+                  placeholder="이름이나 연락처로 검색"
                 />
               </div>
               <button className="px-3 border border-1 bg-gray-700 text-white">
                 검색
               </button>
-            </div>
+            </form>
             <div className="projectListWrap grid grid-cols-2 p-5 devide-y devide-lightblue-500">
               <div className="tableWrap p-1">
                 <table className="border-t border-1">
@@ -54,17 +129,17 @@ const AlarmTalkPage = () => {
                     </tr>
                   </thead>
                   <tbody>
-                    {/* {firstHalf.map((user: IUser) => {
+                    {firstCustomers?.map((data: ICustomers) => {
                       return (
                         <tr
                           className="border-b border-1 text-center"
-                          key={user.id}
+                          key={data.phoneNumber}
                         >
-                          <td>{user.name}</td>
-                          <td>010-1234-1234</td>
+                          <td>{data.name}</td>
+                          <td>{data.phoneNumber}</td>
                         </tr>
                       );
-                    })} */}
+                    })}
                   </tbody>
                 </table>
               </div>
@@ -77,22 +152,46 @@ const AlarmTalkPage = () => {
                     </tr>
                   </thead>
                   <tbody>
-                    {/* {secondHalf.map((user: IUser) => {
+                    {secondCustomers?.map((data: ICustomers) => {
                       return (
                         <tr
                           className="border-b border-1 text-center"
-                          key={user.id}
+                          key={data.phoneNumber}
                         >
-                          <td>{user.name}</td>
-                          <td>010-1234-1234</td>
+                          <td>{data.name}</td>
+                          <td>{data.phoneNumber}</td>
                         </tr>
                       );
-                    })} */}
+                    })}
                   </tbody>
                 </table>
               </div>
             </div>
-            <Pagination totalPage={3} />
+            <div className="pagination grid grid-cols-3 text-center items-center max-w-md mx-auto mt-10">
+              {page > 1 ? (
+                <button
+                  onClick={onPrevPageClick}
+                  className="focus:outline-none font-medium text-2xl"
+                >
+                  &larr;
+                </button>
+              ) : (
+                <div></div>
+              )}
+              <span className="mx-5">
+                {page} of {totalPages}
+              </span>
+              {page !== totalPages ? (
+                <button
+                  onClick={onNextPageClick}
+                  className="focus:outline-none font-medium text-2xl"
+                >
+                  &rarr;
+                </button>
+              ) : (
+                <div></div>
+              )}
+            </div>
           </div>
           <div className="alarmtalkSendWrap mt-2 ml-1 bg-white">
             <div className="headerWrap p-3 bg-gray-700 text-white">
@@ -113,7 +212,12 @@ const AlarmTalkPage = () => {
           </div>
         </div>
         <div className="buttonsWrap grid grid-cols-5 mt-10">
-          <button className="m-1 p-2 col-start-2 col-end-3 bg-gray-700 text-white">
+          <button
+            className="m-1 p-2 col-start-2 col-end-3 bg-gray-700 text-white"
+            onClick={() => {
+              history.push("/createCustomer");
+            }}
+          >
             분양톡 멤버 추가
           </button>
           <button className="m-1 p-2 col-start-3 col-end-4 bg-white">

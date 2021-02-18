@@ -12,6 +12,11 @@ export enum UserRole {
   Operator = "Operator",
 }
 
+export interface CreateCustomerInput {
+  phoneNumber: string;
+  name: string;
+}
+
 export interface CreateUserDto {
   phoneNumber: string;
   password: string;
@@ -20,6 +25,13 @@ export interface CreateUserDto {
 export interface LoginInput {
   phoneNumber: string;
   password: string;
+}
+
+export interface SearchCustomerInput {
+  phoneNumber?: string | null;
+  name?: string | null;
+  pageNo: number;
+  pageSize: number;
 }
 
 //==============================================================

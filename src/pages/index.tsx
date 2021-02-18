@@ -5,6 +5,8 @@ import InfoPage from "./InfoPage";
 import AlarmTalkPage from "./AlarmTalkPage";
 import ReservationPage from "./ReservationPage";
 import OptionPage from "./OptionPage";
+import CreateCustomerPage from "./CreateCustomerPage";
+// import SearchPage from "./SearchPage";
 
 export {
   CreateUserPage,
@@ -14,4 +16,6 @@ export {
   AlarmTalkPage,
   ReservationPage,
   OptionPage,
+  CreateCustomerPage,
+  // SearchPage,
 };
