@@ -4,7 +4,7 @@ import CreateUserPage from "../pages/CreateUserPage";
 import LoginPage from "../pages/LoginPage";
 import { NotFound } from "../pages/404";
 
-const LoggedOutRouter = () => {
+export const LoggedOutRouter = () => {
   return (
     <Router>
       <Switch>
@@ -23,4 +23,4 @@ const LoggedOutRouter = () => {
   );
 };
 
-export default LoggedOutRouter;
+// export default LoggedOutRouter;

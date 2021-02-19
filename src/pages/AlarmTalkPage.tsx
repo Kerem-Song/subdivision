@@ -8,6 +8,8 @@ import {
   CustomersQueryVariables,
 } from "../__generated__/CustomersQuery";
 import { useForm } from "react-hook-form";
+import Pagination from "../components/pagination";
+import { divisionArr } from "../utils/divisionArr";
 
 const CUSTOMERS_QUERY = gql`
   query CustomersQuery($searchCustomerInput: SearchCustomerInput!) {
@@ -51,6 +53,10 @@ const AlarmTalkPage = () => {
     },
   });
 
+  useEffect(() => {
+    refetch();
+  }, [data]);
+
   const { register, handleSubmit, getValues } = useForm<IFormProps>();
   const onSearchSubmit = () => {
     const { searchTerm } = getValues();
@@ -60,10 +66,6 @@ const AlarmTalkPage = () => {
     });
   };
 
-  useEffect(() => {
-    refetch();
-  }, [data]);
-
   if (!data || loading || error) {
     return (
       <div className="h-screen flex justify-center items-center">
@@ -72,23 +74,21 @@ const AlarmTalkPage = () => {
     );
   }
 
-  const totalPages = data ? data?.customers?.totalPages : null;
-  const customersData = data ? data?.customers?.data : null;
-
-  if (!customersData) {
+  if (!data.customers?.data) {
     return (
       <div className="h-screen flex justify-center items-center">
-        <span className="font-medium text-xl tracking-wide">Loading...</span>
+        <span className="font-medium text-xl tracking-wide">
+          User Data Loading...
+        </span>
       </div>
     );
   }
 
-  const half = Math.ceil(customersData?.length / 2);
-  const firstCustomers = customersData?.slice(0, half);
-  const secondCustomers = customersData?.slice(-half);
+  const {
+    customers: { data: customersData, totalPages },
+  } = data;
 
-  const onNextPageClick = () => setPage((current) => current + 1);
-  const onPrevPageClick = () => setPage((current) => current - 1);
+  const [firstHalf, secondHalf] = divisionArr(customersData, 2);
 
   return (
     <MainStructure>
@@ -129,7 +129,7 @@ const AlarmTalkPage = () => {
                     </tr>
                   </thead>
                   <tbody>
-                    {firstCustomers?.map((data: ICustomers) => {
+                    {firstHalf?.map((data: ICustomers) => {
                       return (
                         <tr
                           className="border-b border-1 text-center"
@@ -152,7 +152,7 @@ const AlarmTalkPage = () => {
                     </tr>
                   </thead>
                   <tbody>
-                    {secondCustomers?.map((data: ICustomers) => {
+                    {secondHalf?.map((data: ICustomers) => {
                       return (
                         <tr
                           className="border-b border-1 text-center"
@@ -167,31 +167,7 @@ const AlarmTalkPage = () => {
                 </table>
               </div>
             </div>
-            <div className="pagination grid grid-cols-3 text-center items-center max-w-md mx-auto mt-10">
-              {page > 1 ? (
-                <button
-                  onClick={onPrevPageClick}
-                  className="focus:outline-none font-medium text-2xl"
-                >
-                  &larr;
-                </button>
-              ) : (
-                <div></div>
-              )}
-              <span className="mx-5">
-                {page} of {totalPages}
-              </span>
-              {page !== totalPages ? (
-                <button
-                  onClick={onNextPageClick}
-                  className="focus:outline-none font-medium text-2xl"
-                >
-                  &rarr;
-                </button>
-              ) : (
-                <div></div>
-              )}
-            </div>
+            <Pagination totalPage={totalPages!} page={page} setPage={setPage} />
           </div>
           <div className="alarmtalkSendWrap mt-2 ml-1 bg-white">
             <div className="headerWrap p-3 bg-gray-700 text-white">

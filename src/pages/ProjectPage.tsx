@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState, useEffect } from "react";
 import { gql, useQuery } from "@apollo/client";
 import Pagination from "../components/pagination";
 import MainStructure from "../components/mainStructure";
@@ -12,21 +12,37 @@ interface IUser {
 let refetchData;
 
 const ProjectPage = () => {
+  const [page, setPage] = useState(1);
+  const [pageSize, setPageSize] = useState(7);
   // const { loading, error, data, refetch } = useQuery(Me);
 
   // refetchData = refetch;
 
-  // if (loading) {
-  //   return <p>Loading...</p>;
+  // if (!data || loading || error) {
+  //   return (
+  //     <div className="h-screen flex justify-center items-center">
+  //       <span className="font-medium text-xl tracking-wide">Loading...</span>
+  //     </div>
+  //   );
   // }
 
-  // if (error) {
-  //   return <p>error...</p>;
+  // if (!data.projects?.data) {
+  //   return (
+  //     <div className="h-screen flex justify-center items-center">
+  //       <span className="font-medium text-xl tracking-wide">
+  //         Project Data Loading...
+  //       </span>
+  //     </div>
+  //   );
   // }
 
-  // const users = data.users.data;
-  // const reverse = users.slice().sort((a: IUser, b: IUser) => b.id - a.id);
-  // console.log("projectPage data:", data);
+  // const {
+  //   projects: { data: projectData, totalPages },
+  // } = data;
+
+  // const reverseData = [...projectData].sort(
+  //   (a, b) => b.id - a.id)
+  // );
 
   return (
     <MainStructure>
@@ -87,7 +103,7 @@ const ProjectPage = () => {
           </table>
         </div>
         {/* <div>{data}</div> */}
-        <Pagination totalPage={3} />
+        {/* <Pagination totalPage={totalPages!} page={page} setPage={setPage} /> */}
       </div>
     </MainStructure>
   );

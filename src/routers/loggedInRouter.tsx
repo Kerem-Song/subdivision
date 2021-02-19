@@ -26,7 +26,7 @@ const OperatorRoutes = [
   </Route>,
 ];
 
-const LoggedInRouter = () => {
+export const LoggedInRouter = () => {
   const { data, loading, error } = useMe();
 
   if (!data || loading || error) {
@@ -56,5 +56,3 @@ const LoggedInRouter = () => {
     </Router>
   );
 };
-
-export default LoggedInRouter;

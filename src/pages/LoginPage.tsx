@@ -1,6 +1,7 @@
 import React from "react";
 import { Link, useHistory } from "react-router-dom";
 import { useForm } from "react-hook-form";
+import { Helmet } from "react-helmet-async";
 import { gql, useMutation } from "@apollo/client";
 import { authTokenVar, isLoggedInVar } from "../apollo";
 import FormError from "../components/formError";
@@ -76,6 +77,9 @@ const LoginPage = () => {
 
   return (
     <div className="h-screen flex flex-col items-center">
+      <Helmet>
+        <title>Login | 분양톡 관리자</title>
+      </Helmet>
       <div className="max-w-screen-sm pt-20 p-10 items-center">
         <form className="flex" onSubmit={handleSubmit(onSubmit)}>
           <div className="flex-col">
@@ -95,7 +99,7 @@ const LoginPage = () => {
                 className="inpuBordeer"
                 ref={register({
                   required: "비밀번호 입력은 필수입니다.",
-                  // pattern: /^[A-Za-z0-9._%+-!@#$^&*()]$/
+                  // pattern: /^[A-Za-z0-9._%+-!@#$^&*()]$/,
                 })}
                 name="password"
                 type="password"
