@@ -1,5 +1,5 @@
-import CreateUserPage from "./CreateUserPage";
-import LoginPage from "./LoginPage";
+import { CreateUserPage } from "./CreateUserPage";
+import { LoginPage } from "./LoginPage";
 import ProjectPage from "./ProjectPage";
 import InfoPage from "./InfoPage";
 import AlarmTalkPage from "./AlarmTalkPage";

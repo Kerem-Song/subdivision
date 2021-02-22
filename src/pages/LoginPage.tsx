@@ -12,7 +12,7 @@ import {
 } from "../__generated__/LoginMutation";
 import { LOCALSTORAGE_TOKEN } from "../constants";
 
-const LOGIN_MUTATION = gql`
+export const LOGIN_MUTATION = gql`
   mutation LoginMutation($loginInput: LoginInput!) {
     login(input: $loginInput) {
       ok
@@ -27,7 +27,7 @@ interface ILoginForm {
   password: string;
 }
 
-const LoginPage = () => {
+export const LoginPage = () => {
   const history = useHistory();
 
   const {
@@ -44,16 +44,17 @@ const LoginPage = () => {
     const {
       login: { ok, token, error },
     } = data;
-
+    // console.log("login on complete data", data);
     if (ok && token) {
       localStorage.setItem(LOCALSTORAGE_TOKEN, token);
       authTokenVar(token);
       isLoggedInVar(true);
       history.push("/project");
       console.log("onCompletedToken: ", token);
-    } else {
-      console.log("onCompletedError: ", error);
     }
+    // else {
+    //   console.log("onCompletedError: ", error);
+    // }
   };
 
   const [loginMutation, { data: loginMutationResult, loading }] = useMutation<
@@ -85,24 +86,32 @@ const LoginPage = () => {
           <div className="flex-col">
             <div>
               <input
-                className="inputBorer"
+                name="phoneNumber"
+                className="inputBorder"
                 ref={register({
                   required: "휴대폰번호 입력은 필수입니다.",
+                  pattern: /[0-9]/,
                 })}
-                name="phoneNumber"
                 placeholder="휴대폰 번호 입력"
                 required
               />
+              {errors.phoneNumber?.type === "pattern" && (
+                <FormError errorMessage="숫자만 입력하세요" />
+              )}
+              {errors.phoneNumber?.message && (
+                <FormError errorMessage={errors.phoneNumber.message} />
+              )}
             </div>
             <div>
               <input
-                className="inpuBordeer"
+                name="password"
+                type="password"
+                className="inputBorder"
                 ref={register({
                   required: "비밀번호 입력은 필수입니다.",
                   // pattern: /^[A-Za-z0-9._%+-!@#$^&*()]$/,
+                  minLength: 10,
                 })}
-                name="password"
-                type="password"
                 placeholder="비밀번호 입력"
                 required
               />
@@ -133,5 +142,3 @@ const LoginPage = () => {
     </div>
   );
 };
-
-export default LoginPage;

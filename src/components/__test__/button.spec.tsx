@@ -14,7 +14,7 @@ describe("<Button />", () => {
     const { debug, getByText, container } = render(
       <Button canClick={false} loading={true} actionText={"test"} />
     );
-    debug();
+    // debug();
     getByText("Loading...");
     expect(container.firstChild).toHaveClass("pointer-events-none");
   });

@@ -10,7 +10,7 @@ import {
   CreateUserMutationVariables,
 } from "../__generated__/CreateUserMutation";
 
-const CREATE_USER_MUTATION = gql`
+export const CREATE_USER_MUTATION = gql`
   mutation CreateUserMutation($createUserInput: CreateUserDto!) {
     createUser(input: $createUserInput) {
       ok
@@ -24,7 +24,7 @@ interface ICreateUserForm {
   password: string;
 }
 
-const CreateUserPage = () => {
+export const CreateUserPage = () => {
   const {
     register,
     getValues,
@@ -41,6 +41,7 @@ const CreateUserPage = () => {
     } = data;
 
     if (ok) {
+      alert("계정이 생성되었습니다. 로그인 하세요.");
       history.push("/");
     }
   };
@@ -72,7 +73,7 @@ const CreateUserPage = () => {
   return (
     <div className="h-screen flex flex-col items-center">
       <Helmet>
-        <title>회원가입</title>
+        <title>회원가입 | 분양톡 관리자</title>
       </Helmet>
       <div className="w-full max-w-screen-sm flex flex-coll px-20 items-center">
         <form onSubmit={handleSubmit(onSubmit)}>
@@ -81,11 +82,18 @@ const CreateUserPage = () => {
               className="inputBorer"
               ref={register({
                 required: "휴대폰번호 입력은 필수입니다.",
+                pattern: /[0-9]/,
               })}
               name="phoneNumber"
               placeholder="휴대폰 번호 입력"
               required
             />
+            {errors.phoneNumber?.type === "pattern" && (
+              <FormError errorMessage="숫자만 입력하세요" />
+            )}
+            {errors.phoneNumber?.message && (
+              <FormError errorMessage={errors.phoneNumber.message} />
+            )}
           </div>
           <div>
             <input
@@ -93,6 +101,7 @@ const CreateUserPage = () => {
               ref={register({
                 required: "비밀번호 입력은 필수입니다.",
                 // pattern: /^[A-Za-z0-9._%+-!@#$^&*()]$/
+                minLength: 10,
               })}
               name="password"
               type="password"
@@ -127,5 +136,3 @@ const CreateUserPage = () => {
     </div>
   );
 };
-
-export default CreateUserPage;
