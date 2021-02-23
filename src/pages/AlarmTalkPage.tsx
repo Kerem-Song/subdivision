@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { useHistory } from "react-router-dom";
 import { Helmet } from "react-helmet-async";
-import { gql, useQuery } from "@apollo/client";
+import { gql, useApolloClient, useQuery } from "@apollo/client";
 import MainStructure from "../components/mainStructure";
 import {
   CustomersQuery,
@@ -11,7 +11,7 @@ import { useForm } from "react-hook-form";
 import Pagination from "../components/pagination";
 import { divisionArr } from "../utils/divisionArr";
 
-const CUSTOMERS_QUERY = gql`
+export const CUSTOMERS_QUERY = gql`
   query CustomersQuery($searchCustomerInput: SearchCustomerInput!) {
     customers(input: $searchCustomerInput) {
       ok
@@ -53,9 +53,49 @@ const AlarmTalkPage = () => {
     },
   });
 
+  const client = useApolloClient();
+
   useEffect(() => {
-    refetch();
-  }, [data]);
+    setTimeout(() => {
+      const queryResult = client.readQuery({
+        query: CUSTOMERS_QUERY,
+        variables: {
+          searchCustomerInput: {
+            pageNo: page,
+            pageSize: pageSize,
+          },
+        },
+      });
+      console.log("알람톡 queryResult:", queryResult);
+      client.writeQuery({
+        query: CUSTOMERS_QUERY,
+        variables: {
+          searchCustomerInput: {
+            pageNo: page,
+            pageSize: pageSize,
+          },
+        },
+        data: {
+          customers: {
+            ...queryResult.customers,
+            data: [
+              {
+                __typename: "Customer",
+                phoneNumber: "01011111111",
+                name: "test1",
+              },
+              {
+                __typename: "Customer",
+                phoneNumber: "01022222222",
+                name: "test2",
+              },
+            ],
+          },
+        },
+      });
+    }, 5000);
+    // refetch();
+  }, []);
 
   const { register, handleSubmit, getValues } = useForm<IFormProps>();
   const onSearchSubmit = () => {

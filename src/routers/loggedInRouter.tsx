@@ -12,18 +12,56 @@ import {
   ReservationPage,
   OptionPage,
   CreateCustomerPage,
+  CreateUserPage,
   // SearchPage,
 } from "../pages";
 import { useMe } from "../hooks/useMe";
 import { NotFound } from "../pages/404";
 
-const OperatorRoutes = [
-  <Route key={1} exact path="/reservation">
-    <ReservationPage />
-  </Route>,
-  <Route key={2} path="/Search">
-    {/* <SearchPage /> */}
-  </Route>,
+const operatorRoutes = [
+  {
+    path: "/reservation",
+    component: <ReservationPage />,
+  },
+  {
+    path: "/option",
+    component: <OptionPage />,
+  },
+  // {
+  //   path: "/search",
+  //   component: <SearchPage />,
+  // },
+];
+
+const commonRoutes = [
+  {
+    path: "/",
+    component: <ProjectPage />,
+  },
+  {
+    path: "/info",
+    component: <InfoPage />,
+  },
+  {
+    path: "/alarmtalk",
+    component: <AlarmTalkPage />,
+  },
+  {
+    path: "/project",
+    component: <ProjectPage />,
+  },
+  {
+    path: "/reservation",
+    component: <ReservationPage />,
+  },
+  {
+    path: "/option",
+    component: <OptionPage />,
+  },
+  {
+    path: "/createCustomer",
+    component: <CreateCustomerPage />,
+  },
 ];
 
 export const LoggedInRouter = () => {
@@ -40,15 +78,17 @@ export const LoggedInRouter = () => {
   return (
     <Router>
       <Switch>
-        {/* {data.me.role === "Operator" && OperatorRoutes} */}
-        <Redirect from="potato" to="/" />
-        <Route exact path="/" component={ProjectPage} />
-        <Route path="/project" component={ProjectPage} />
-        <Route path="/info" component={InfoPage} />
-        <Route path="/alarmtalk" component={AlarmTalkPage} />
-        <Route path="/reservation" component={ReservationPage} />
-        <Route path="/option" component={OptionPage} />
-        <Route path="/createCustomer" component={CreateCustomerPage} />
+        {/* {data.me.role === "Operator" &&
+          operatorRoutes.map((route) => (
+            <Route key={route.path} exact path={route.path}>
+              {route.component}
+            </Route>
+          ))} */}
+        {commonRoutes.map((route) => (
+          <Route key={route.path} exact path={route.path}>
+            {route.component}
+          </Route>
+        ))}
         <Route>
           <NotFound />
         </Route>

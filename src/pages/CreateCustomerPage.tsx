@@ -3,6 +3,7 @@ import { Link, useHistory } from "react-router-dom";
 import { useForm } from "react-hook-form";
 import { Helmet } from "react-helmet-async";
 import { gql, useMutation } from "@apollo/client";
+// import { CUSTOMERS_QUERY } from "../pages/AlarmTalkPage";
 import FormError from "../components/formError";
 import { Button } from "../components/button";
 import {
@@ -49,7 +50,10 @@ const CreateCustomerPage = () => {
     { data: createCustomerMutationResult, loading },
   ] = useMutation<CreateCustomerMutation, CreateCustomerMutationVariables>(
     CREATE_CUSTOMER_MUTATION,
-    { onCompleted }
+    {
+      onCompleted,
+      // refetchQueries: [{ query: CUSTOMERS_QUERY }]
+    }
   );
 
   const onSubmit = () => {

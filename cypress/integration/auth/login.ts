@@ -17,14 +17,15 @@ describe("Log In", () => {
     cy.findByPlaceholderText("비밀번호 입력").type("a").clear();
     cy.findByRole("alert").should("have.text", "비밀번호 입력은 필수입니다.");
   });
-  it("can fill out the form", () => {
-    cy.visit("/");
-    cy.findByPlaceholderText("휴대폰 번호 입력").type("01012341234");
-    cy.findByPlaceholderText("비밀번호 입력").type("1234567890");
-    cy.findByRole("button")
-      .should("not.have.class", "pointer-events-none")
-      .click();
-    cy.window().its("localStorage.subdivision-token").should("be.a", "string");
+  it("can fill out the form and login", () => {
+    // cy.visit("/");
+    // cy.findByPlaceholderText("휴대폰 번호 입력").type("01012341234");
+    // cy.findByPlaceholderText("비밀번호 입력").type("1234567890");
+    // cy.findByRole("button")
+    //   .should("not.have.class", "pointer-events-none")
+    //   .click();
+    // cy.window().its("localStorage.subdivision-token").should("be.a", "string");
+    cy.login("01012341234", "1234567890");
   });
   it("sign up", () => {
     cy.visit("/createUser");

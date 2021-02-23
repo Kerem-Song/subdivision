@@ -1,8 +1,20 @@
-import React from "react";
+import React, { useState } from "react";
 import { useForm } from "react-hook-form";
 import MainStructure from "../components/mainStructure";
 import FormError from "../components/formError";
+import { Button } from "../components/button";
+import { useApolloClient, useMutation } from "@apollo/client";
+import { useHistory } from "react-router-dom";
 
+// export const CREATE_INFO_MUTATION = gql`
+//   mutation createInfoMutation($input: CreateInfoInput!) {
+//     createInfo(input: $input) {
+//       error
+//       ok
+//       infoId
+//     }
+//   }
+// `
 interface IFormData {
   placeName: string;
   location: string;
@@ -14,7 +26,8 @@ interface IFormData {
   menuName: string;
   link: string;
   introduction: string;
-  image: File;
+  file: FileList;
+  image: FileList;
   enviornment: string;
 
   openDate: string;
@@ -29,9 +42,87 @@ interface IFormData {
 }
 
 const OptionPage = () => {
-  const { register, handleSubmit, watch, errors } = useForm<IFormData>();
+  const client = useApolloClient();
+  const history = useHistory();
+  const [imageUrl, setImageUrl] = useState("");
+  const [uploading, setUploading] = useState(false);
 
-  const onSubmit = (data: string) => console.log(data);
+  // const onCompleted = (data: createInfo) => {
+  //   const {
+  //     createInfo: { ok, error, infoId },
+  //   } = data;
+  //   if (ok) {
+  //     const { name, phoneNumber, info, etc } = getValues();
+  //     setUploading(false);
+  //     const queryResult = client.readQuery({ query: TEST_QUERY });
+  //     client.writeQuery({
+  //       query: TEST_QUERY,
+  //       data: {
+  //         info: {
+  //           ...queryResult.info,
+  //           data: [
+  //             //받아오는 데이터와 모양이 정확히 일치해야함.
+  //             {
+  //               __typename: "",
+  //               phoneNumber,
+  //               name,
+  //               img: imageUrl,
+  //             },
+  //             ...queryResult.info.data,
+  //           ],
+  //         },
+  //       },
+  //     });
+  //   }
+  // };
+
+  // const [createMenuMutation, { loading, data }] = useMutation<
+  //   createInfo,
+  //   createInfoVariables
+  // >(CREATE_INFO_MUTATION, { onCompleted });
+
+  const {
+    register,
+    handleSubmit,
+    getValues,
+    formState,
+    errors,
+  } = useForm<IFormData>({
+    mode: "onChange",
+  });
+
+  const onSubmit = async () => {
+    try {
+      setUploading(true);
+      const { file } = getValues();
+      const actualFile = file[0];
+      const formBody = new FormData();
+      formBody.append("file", actualFile);
+      const { url: coverImg } = await (
+        await fetch(
+          "http://dev-parcelout-backend.ap-northeast-2.elasticbeanstalk.com/graphql/uploads/",
+          {
+            method: "POST",
+            body: formBody,
+          }
+        )
+      ).json();
+      setImageUrl(coverImg);
+      console.log("InfoPage request url:", coverImg);
+      // Mutation 생성시 수정
+      // createInfoMutation({
+      //   variables: {
+      //     input: {
+      //       name,
+      //       phoneNumber,
+      //       file,
+      //     },
+      //   },
+      // });
+    } catch (e) {
+      console.log(e);
+    }
+  };
 
   const handleBasiInfoSubmit = () => {
     console.log("basicInfoSubmit");
@@ -171,9 +262,10 @@ const OptionPage = () => {
                   </label>
                   <div className="fileUpload col-span-6 grid grid-cols-5">
                     <input
-                      name="image"
-                      className="col-span-4 border border-gray-200"
                       type="file"
+                      name="file"
+                      accept="image/*"
+                      className="col-span-4 border border-gray-200"
                       onChange={undefined}
                       ref={register({ required: "메뉴명 입력은 필수입니다." })}
                     />
@@ -313,6 +405,11 @@ const OptionPage = () => {
             <button className="m-1 p-2 col-start-4 col-end-5 bg-yellow-300">
               테스트
             </button>
+            <Button
+              loading={uploading}
+              canClick={formState.isValid}
+              actionText="create Info"
+            />
           </div>
         </form>
       </>
