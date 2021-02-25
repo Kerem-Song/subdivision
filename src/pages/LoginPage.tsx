@@ -1,23 +1,22 @@
-import React from "react";
+import React, { useState } from "react";
 import { Link, useHistory } from "react-router-dom";
 import { useForm } from "react-hook-form";
 import { Helmet } from "react-helmet-async";
 import { gql, useMutation } from "@apollo/client";
-import { authTokenVar, isLoggedInVar } from "../apollo";
 import FormError from "../components/formError";
 import { Button } from "../components/button";
+import { VerifyPhone } from "../components/verifyPhone";
 import {
   LoginMutation,
   LoginMutationVariables,
 } from "../__generated__/LoginMutation";
-import { LOCALSTORAGE_TOKEN } from "../constants";
 
 export const LOGIN_MUTATION = gql`
   mutation LoginMutation($loginInput: LoginInput!) {
     login(input: $loginInput) {
       ok
-      token
       error
+      userId
     }
   }
 `;
@@ -25,10 +24,13 @@ export const LOGIN_MUTATION = gql`
 interface ILoginForm {
   phoneNumber: string;
   password: string;
+  userId: number;
+  code: string;
 }
 
 export const LoginPage = () => {
   const history = useHistory();
+  const [id, setId] = useState(0);
 
   const {
     register,
@@ -42,19 +44,11 @@ export const LoginPage = () => {
 
   const onCompleted = (data: LoginMutation) => {
     const {
-      login: { ok, token, error },
+      login: { ok, userId, error },
     } = data;
-    // console.log("login on complete data", data);
-    if (ok && token) {
-      localStorage.setItem(LOCALSTORAGE_TOKEN, token);
-      authTokenVar(token);
-      isLoggedInVar(true);
-      history.push("/project");
-      console.log("onCompletedToken: ", token);
+    if (ok && userId) {
+      setId(userId);
     }
-    // else {
-    //   console.log("onCompletedError: ", error);
-    // }
   };
 
   const [loginMutation, { data: loginMutationResult, loading }] = useMutation<
@@ -110,7 +104,7 @@ export const LoginPage = () => {
                 ref={register({
                   required: "비밀번호 입력은 필수입니다.",
                   // pattern: /^[A-Za-z0-9._%+-!@#$^&*()]$/,
-                  minLength: 10,
+                  // minLength: 10,
                 })}
                 placeholder="비밀번호 입력"
                 required
@@ -126,12 +120,13 @@ export const LoginPage = () => {
           <Button
             canClick={formState.isValid}
             loading={loading}
-            actionText={"로그인"}
+            actionText={"인증번호 입력하기"}
           />
           {loginMutationResult?.login.error && (
             <FormError errorMessage={loginMutationResult.login.error} />
           )}
         </form>
+        {!loginMutationResult ? <div></div> : <VerifyPhone userId={id} />}
       </div>
       <div>
         <span>아직 회원이 아니세요?</span>{" "}

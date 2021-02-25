@@ -34,6 +34,11 @@ export interface SearchCustomerInput {
   pageSize: number;
 }
 
+export interface VerifyPhoneInput {
+  userId: number;
+  code: string;
+}
+
 //==============================================================
 // END Enums and Input Objects
 //==============================================================
