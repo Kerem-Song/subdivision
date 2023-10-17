@@ -1,17 +1,25 @@
 import React, { useState } from "react";
 
 interface IPagination {
-  totalPage: number;
+  totalPage?: number;
+  page: number;
+  setPage: React.Dispatch<React.SetStateAction<number>>;
 }
 
-const Pagination = ({ totalPage }: IPagination) => {
-  const [pageNo, setPageNo] = useState(1);
-  // const [pageSize, setPageSize] = useState(5);
+const Pagination = ({
+  totalPage,
 
+  page,
+  setPage,
+}: IPagination) => {
   // 페이지 리스트 불러오는 쿼리 or dispatch
   // useEffect(() => {
   //   handleUserStories(pageInfo);
   // }, [pageNo]);
+
+  if (!totalPage) {
+    return <div></div>;
+  }
 
   const pageArr = [];
 
@@ -23,16 +31,16 @@ const Pagination = ({ totalPage }: IPagination) => {
     const page = e.currentTarget.dataset.page;
     const pageNum = Number(page);
 
-    // setPageNo(pageNum);
+    setPage(pageNum);
   };
 
   const handlePageIndex = (e: React.MouseEvent<HTMLElement>) => {
     const action = e.currentTarget.dataset.action;
 
     if (action === "prev") {
-      return setPageNo(pageNo - 1);
+      return setPage((current) => current - 1);
     } else if (action === "next") {
-      return setPageNo(pageNo + 1);
+      return setPage((current) => current + 1);
     }
   };
 
@@ -40,7 +48,7 @@ const Pagination = ({ totalPage }: IPagination) => {
     <div className="paginationWrap flex justify-center items-center">
       <ul className="pagination flex justify-center items-center">
         <li className="page-item p-3">
-          {pageNo === 1 ? null : (
+          {page > 1 ? (
             <a
               className="page-link"
               href="#"
@@ -49,6 +57,8 @@ const Pagination = ({ totalPage }: IPagination) => {
             >
               prev
             </a>
+          ) : (
+            <div></div>
           )}
         </li>
         <li className="p-3">
@@ -67,7 +77,7 @@ const Pagination = ({ totalPage }: IPagination) => {
           })}
         </li>
         <li className="page-item p-3">
-          {pageNo < totalPage ? (
+          {page !== totalPage ? (
             <a
               className="page-link"
               href="#"
@@ -76,7 +86,9 @@ const Pagination = ({ totalPage }: IPagination) => {
             >
               Next
             </a>
-          ) : null}
+          ) : (
+            <div></div>
+          )}
         </li>
       </ul>
     </div>
